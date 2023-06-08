@@ -1,16 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="with=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Djason NATHIEZ</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<p>MENU : HOME | ABOUT ME | PROJECTS | CONTACT</p>
-<p>Home content : Projects Highlight</p>
-<p> Projects : Delight, Discosmos, Sweet Courrier, BeatStrike.</p>
-<p> Contacts : mail, tel, discord, linkedin</p>
+    <title>Djason NATHIEZ</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8961a60d83.js" crossorigin="anonymous"></script></head>
+<body>
+<section class="header">
+<nav>
+    <a href="index.html"><img src="img/logo.png" alt="Djason NATHIEZ"></a>
+    <div class="nav-links" id="navLinks">
+        <i class="fa fa-times" onclick="hideMenu()"></i>
+        <ul>
+            <li><a href="">HOME</a></li>
+            <li><a href="">ABOUT ME</a></li>
+            <li><a href="">PROJECTS</a></li>
+            <li><a href="">CONTACT</a></li>
+        </ul>
+    </div>
+    <i class="fa fa-bars" onclick="showMenu()"></i>
+</nav>
+    <div class="text-box">
+        <h1>Djason NATHIEZ</h1>
+        <p> Hi, I'm Djason ! I'm a Game Programmer working with Unity, Unreal Engine and create some non engine projects.</p>
+        <a href="" class="hero-btn">Check out my projects !</a>
+    </div>
+</section>
+
+<section class="about-me">
+    <h1>About Me</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum velit velit, gravida quis dapibus sit amet, vulputate quis odio. Nullam quis lectus sem. Phasellus gravida imperdiet neque at porttitor. Sed dictum eleifend orci. Aenean nunc erat, maximus in massa quis, sodales vestibulum leo. Morbi id nisl ultricies quam placerat condimentum id facilisis metus. Vivamus in sapien eget elit ornare sollicitudin. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut auctor magna vel malesuada dictum. Etiam auctor sapien vel sapien mattis imperdiet. Fusce dapibus nulla imperdiet enim tristique, id venenatis ex mattis.</p>
+
+    <div class="row">
+        <div class="about-me-col">
+            <h3>Teamwork</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum velit velit, gravida quis dapibus sit amet, vulputate quis odio. Nullam quis lectus sem. Phasellus gravida imperdiet neque at porttitor. Sed dictum eleifend orci. Aenean nunc erat, maximus in massa quis, sodales vestibulum leo. Morbi id nisl ultricies quam placerat condimentum id facilisis metus. Vivamus in sapien eget elit ornare sollicitudin. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut auctor magna vel malesuada dictum. Etiam auctor sapien vel sapien mattis imperdiet. Fusce dapibus nulla imperdiet enim tristique, id venenatis ex mattis.</p>
+        </div>
+        <div class="about-me-col">
+            <h3>Adaptative</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum velit velit, gravida quis dapibus sit amet, vulputate quis odio. Nullam quis lectus sem. Phasellus gravida imperdiet neque at porttitor. Sed dictum eleifend orci. Aenean nunc erat, maximus in massa quis, sodales vestibulum leo. Morbi id nisl ultricies quam placerat condimentum id facilisis metus. Vivamus in sapien eget elit ornare sollicitudin. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut auctor magna vel malesuada dictum. Etiam auctor sapien vel sapien mattis imperdiet. Fusce dapibus nulla imperdiet enim tristique, id venenatis ex mattis.</p>
+        </div>
+        <div class="about-me-col">
+            <h3>Multi Skills</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum velit velit, gravida quis dapibus sit amet, vulputate quis odio. Nullam quis lectus sem. Phasellus gravida imperdiet neque at porttitor. Sed dictum eleifend orci. Aenean nunc erat, maximus in massa quis, sodales vestibulum leo. Morbi id nisl ultricies quam placerat condimentum id facilisis metus. Vivamus in sapien eget elit ornare sollicitudin. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut auctor magna vel malesuada dictum. Etiam auctor sapien vel sapien mattis imperdiet. Fusce dapibus nulla imperdiet enim tristique, id venenatis ex mattis.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="projects">
+    <h1>Projects</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum velit velit, gravida quis dapibus sit amet, vulputate quis odio. Nullam quis lectus sem. Phasellus gravida imperdiet neque at porttitor. Sed dictum eleifend orci. Aenean nunc erat, maximus in massa quis, sodales vestibulum leo. Morbi id nisl ultricies quam placerat condimentum id facilisis metus. Vivamus in sapien eget elit ornare sollicitudin. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut auctor magna vel malesuada dictum. Etiam auctor sapien vel sapien mattis imperdiet. Fusce dapibus nulla imperdiet enim tristique, id venenatis ex mattis.</p>
+
+    <div class="row">
+        <div class="projects-col">
+            <img src="img/swc.png" alt="sweet courriers">
+            <div class="layer">
+                <h3>Sweet Couriers</h3>
+                <p>Sweet Couriers is a Twinstick Shooter where you play plushies in cars that have to drive and shoot inside containers to fill them. Beware,  you'll have to play with your teammate to complete this !</p>
+            </div>
+        </div>
+        <div class="projects-col">
+            <img src="img/delight.png" alt="Delight">
+            <div class="layer">
+                <h3>Delight</h3>
+                <p>Delight is a Zelda-like action-adventure game where you play as Kent, a young raccoon searching for his missing father. Wandering through the abandoned Delight Park, you have to face the automatons that have taken over the area and solve puzzles with your cable.</p>
+                <p>On this project, I was in charge of AI behaviour, UI integration and some macro systems.</p>
+                <img src="img/delight-gameplay.gif">
+                <p><a href=""> See more...</a> </p>
+            </div>
+        </div>
+        <div class="projects-col">
+            <img src="img/beatstrike.png" alt="Beatstrike">
+            <div class="layer">
+                <h3>BeatStrike</h3>
+                <p>BeatStrike is a Rythm-RPG mobile game. You'll have to play in a endless run, fighting against monster across a mysterious desert surrounded by archeonic ruins.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+    var navLinks = document.getElementById("navLinks");
+    function showMenu(){
+        navLinks.style.right = "0";
+    }
+
+    function hideMenu(){
+        navLinks.style.right = "-300px";
+    }
+</script>
+
 </body>
 </html>
