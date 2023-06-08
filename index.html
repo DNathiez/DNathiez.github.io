@@ -14,7 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/8961a60d83.js" crossorigin="anonymous"></script></head>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
 <body>
+
+<i class="fa fa-chevron-up" id="goTopBtn" onclick="topFunction()"></i>
+
 <section class="header">
 <nav>
     <a href="index.html"><img src="img/logo.png" alt="Djason NATHIEZ"></a>
@@ -22,9 +28,8 @@
     <div class="nav-links" id="navLinks">
         <i class="fa fa-times" onclick="hideMenu()"></i>
         <ul>
-            <li><a href="">HOME</a></li>
-            <li><a href="">ABOUT ME</a></li>
-            <li><a href="">PROJECTS</a></li>
+            <li><a href="#about-me">ABOUT ME</a></li>
+            <li><a href="#projects">PROJECTS</a></li>
             <li><a href="">CONTACT</a></li>
         </ul>
     </div>
@@ -33,11 +38,11 @@
     <div class="text-box">
         <h1>Djason NATHIEZ</h1>
         <p> Hi, I'm Djason ! I'm a Game Programmer working with Unity, Unreal Engine and create some non engine projects.</p>
-        <a href="" class="hero-btn">Check out my projects !</a>
+        <a href="#projects" class="hero-btn">Check out my projects !</a>
     </div>
 </section>
 
-<section class="about-me">
+<section class="about-me" id="about-me">
     <h1>About Me</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum velit velit, gravida quis dapibus sit amet, vulputate quis odio. Nullam quis lectus sem. Phasellus gravida imperdiet neque at porttitor. Sed dictum eleifend orci. Aenean nunc erat, maximus in massa quis, sodales vestibulum leo. Morbi id nisl ultricies quam placerat condimentum id facilisis metus. Vivamus in sapien eget elit ornare sollicitudin. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut auctor magna vel malesuada dictum. Etiam auctor sapien vel sapien mattis imperdiet. Fusce dapibus nulla imperdiet enim tristique, id venenatis ex mattis.</p>
 
@@ -60,7 +65,7 @@
 </section>
 
 
-<section class="projects">
+<section class="projects" id="projects">
     <h1>Projects</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum velit velit, gravida quis dapibus sit amet, vulputate quis odio. Nullam quis lectus sem. Phasellus gravida imperdiet neque at porttitor. Sed dictum eleifend orci. Aenean nunc erat, maximus in massa quis, sodales vestibulum leo. Morbi id nisl ultricies quam placerat condimentum id facilisis metus. Vivamus in sapien eget elit ornare sollicitudin. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut auctor magna vel malesuada dictum. Etiam auctor sapien vel sapien mattis imperdiet. Fusce dapibus nulla imperdiet enim tristique, id venenatis ex mattis.</p>
 
@@ -70,6 +75,7 @@
             <div class="layer" onclick="">
                 <h3>Sweet Couriers</h3>
                 <p>Sweet Couriers is a Twinstick Shooter where you play plushies in cars that have to drive and shoot inside containers to fill them. Beware,  you'll have to play with your teammate to complete this !</p>
+                <p><a href=""> See more...</a> </p>
             </div>
         </div>
         <div class="projects-col">
@@ -79,6 +85,7 @@
                 <p>Delight is a Zelda-like action-adventure game where you play as Kent, a young raccoon searching for his missing father. Wandering through the abandoned Delight Park, you have to face the automatons that have taken over the area and solve puzzles with your cable.</p>
                 <p>On this project, I was in charge of AI behaviour, UI integration and some macro systems.</p>
                 <img src="img/delight-gameplay.gif">
+                <p><a href=""> See more...</a> </p>
             </div>
         </div>
         <div class="projects-col">
@@ -86,6 +93,7 @@
             <div class="layer" onclick="">
                 <h3>BeatStrike</h3>
                 <p>BeatStrike is a Rythm-RPG mobile game. You'll have to play in a endless run, fighting against monster across a mysterious desert surrounded by archeonic ruins.</p>
+                <p><a href=""> See more...</a> </p>
             </div>
         </div>
     </div>
@@ -100,6 +108,51 @@
 
     function hideMenu(){
         navLinks.style.right = "-300px";
+    }
+
+    $(document).ready(function(){
+        // Add smooth scrolling to all links
+        $("a").on('click', function(event) {
+
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "") {
+                // Prevent default anchor click behavior
+                event.preventDefault();
+
+                // Store hash
+                var hash = this.hash;
+
+                // Using jQuery's animate() method to add smooth page scroll
+                // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top
+                }, 800, function(){
+
+                    // Add hash (#) to URL when done scrolling (default click behavior)
+                    window.location.hash = hash;
+                });
+            } // End if
+        });
+    });
+
+    // Get the button
+    let mybutton = document.getElementById("goTopBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
     }
 </script>
 
