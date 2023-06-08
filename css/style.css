@@ -82,6 +82,11 @@ nav img{
     transform: translate(-50%,-50%);
     text-align: center;
  }
+.text-box img{
+    width: 30%;
+    height: auto;
+
+}
 .text-box h1{
     font-size: 62px;
     color: crimson;
@@ -309,4 +314,31 @@ nav .fa{
 }
 .layer:hover img{
     display: inline;
+}
+
+/*----- Contact -----*/
+.contact{
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    padding-top: 50px;
+}
+.contact h1{
+     color: crimson;
+     font-size: 36px;
+     font-weight: 600;
+}
+.contact p{
+    color: black;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 22px;
+    padding: 10px;
+}
+.contact .fa{
+    display: inline;
+}
+.contact .row{
+    margin-top : 2%;
+    justify-content: center;
 }
