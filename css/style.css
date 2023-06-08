@@ -242,6 +242,7 @@ nav .fa{
     word-wrap: break-word;
     hyphens: auto;
     transition-duration: 0.2s;
+    cursor: pointer;
 }
 .layer:hover{
     background: rgba(226,0,0,0.7);
