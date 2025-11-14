@@ -1,39 +1,567 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Mon Portfolio de Développeur</title>
+    <!-- Chargement de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Chargement de la police Roboto via Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+        
+        /* Définition des couleurs améliorées pour le thème sombre */
+        :root {
+            --color-bg-dark: #0d1117; /* Fond très sombre (Git Dark) */
+            --color-text-light: #c9d1d9; /* Texte clair */
+            --color-card-bg: #161b22; /* Fond Card sombre */
+            --color-border: #30363d; /* Bordures sombres */
+            --color-accent-blue: #46a0f8; /* Bleu percutant */
+            --color-accent-orange: #f7a040; /* Orange riche */
+        }
 
-    <title>Djason NATHIEZ</title>
-    <link rel="icon" href="img/logo.png">
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+        }
+        
+        /* Classes Tailwind personnalisées basées sur les variables CSS */
+        .text-accent-main { color: var(--color-accent-orange); } 
+        .text-accent-secondary { color: var(--color-accent-blue); }
+        
+        /* Dégradé pour le titre principal */
+        .gradient-title {
+            background: linear-gradient(90deg, var(--color-accent-orange), var(--color-accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    <link rel="stylesheet" href="css/style.css">
+        .project-card {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(247, 160, 64, 0.15); /* Utilise la couleur accent orange pour l'ombre */
+            border-color: var(--color-accent-orange);
+        }
+        .card-image {
+            height: 150px;
+            object-fit: cover;
+            width: 100%;
+            transition: opacity 0.3s;
+        }
+        .project-card:hover .card-image {
+            opacity: 0.8;
+        }
+        /* Style pour la modale */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: var(--color-bg-dark);
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid var(--color-accent-blue);
+        }
+        .code-block {
+            background-color: #21262d; /* Couleur légèrement plus claire pour le bloc de code */
+            border-left: 4px solid var(--color-accent-orange);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            color: var(--color-text-light);
+        }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/8961a60d83.js" crossorigin="anonymous"></script></head>
+        /* --- Effet Curseur Clignotant --- */
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .blinking-cursor {
+            opacity: 1;
+            font-weight: 400;
+            animation: blink 0.75s step-end infinite;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .blinking-cursor-color {
+            color: var(--color-text-light);
+        }
+    </style>
+</head>
+<body class="antialiased">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Données de Traduction et de Projet -->
+    <script>
+        const translations = {
+            fr: {
+                title: "Mon Portfolio de Développeur",
+                lang_button: "English",
+                hero_title: "Bonjour, je suis Djason NATHIEZ",
+                hero_subtitle: "Développeur de Jeux et Architecte Logiciel",
+                skills_title: "Compétences Techniques Clés",
+                project_video_games: "Projets Jeux Vidéo",
+                project_other: "Autres Projets",
+                learn_more: "En savoir plus...",
+                modal_close: "Fermer",
+                contact_me: "Me Contacter",
+                contact_text: "Vous avez un défi d'architecture de jeu ou un besoin d'optimisation ? Contactez-moi !",
+                watch_video: "Voir la Vidéo de Démo",
+                skills: [
+                    { name: "C# & Unity", desc: "Développement C# et utilisateur du moteur 3D Unity." },
+                    { name: "Network & Database", desc: "Architecture de programmation réseau et base de données." },
+                    { name: "IA & FSM", desc: "Conception de comportements ennemis complexes (Machine à États Finis, NavMesh)." },
+                    { name: "Web & Python", desc: "Site web et outils utilitaire en python." }
+                ]
+            },
+            en: {
+                title: "My Developer Portfolio",
+                lang_button: "Français",
+                hero_title: "Hello, I'm Djason NATHIEZ",
+                hero_subtitle: "Game Developer and Software Architect",
+                skills_title: "Key Technical Skills",
+                project_video_games: "Video Game Projects",
+                project_other: "Other Projects",
+                learn_more: "Learn More...",
+                modal_close: "Close",
+                contact_me: "Contact Me",
+                contact_text: "Have a game architecture challenge or need optimization? Contact me!",
+                watch_video: "Watch Demo Video",
+                skills: [
+                    { name: "C# & Unity DOTS/ECS", desc: "Modular architecture and data-oriented systems for high performance." },
+                    { name: "Unreal Engine & C++", desc: "Multiplayer development (state replication) and native C++ combat systems." },
+                    { name: "Web Backend", desc: "Node.js (Express), PostgreSQL, Docker, and CI/CD pipelines." },
+                    { name: "Optimization & Shaders", desc: "Profiling, Draw Call reduction, and URP/HLSL Shader creation." },
+                    { name: "AI & FSM", desc: "Design of complex enemy behaviors (Finite State Machine, NavMesh)." }
+                ]
+            }
+        };
+
+        const projectsData = [
+            // --- PROJET DELIGHT MIS À JOUR AVEC LIEN VIDÉO ET NOUVELLES INFOS ---
+            {
+                id: "delight", category: "jeux_video", tags: ["Unity", "C#", "Aventure", "3 Mois"],
+                name: { fr: "Delight", en: "Delight" },
+                content_fr: {
+                    title: "Delight",
+                    metrics: [{label: "Moteur", value: "Unity 3D"}, {label: "Genre", value: "Aventure"}, {label: "Rôle", value: "Gameplay Prog."}],
+                    description: "Delight est un jeu d'action-aventure similaire à Zelda où vous incarnez Kent, un jeune raton laveur à la recherche de son père disparu. En errant dans le parc abandonné de Delight, vous devez faire face aux automates qui ont pris le contrôle de la région et résoudre des énigmes avec votre câble. Ce projet était ma première expérience en 3D, développé sur Unity, mais également la première fois que j'étais programmeur à temps plein sur un projet. Le résultat de ce projet devait être un prototype que nous devions développer en 4 mois avec une équipe de 11 personnes.",
+                    key_points: ["Conception et implémentation du contrôleur du personnage-joueur.", "Conception et implémentation des IA (ennemis) et algorithme de machine à état.", "Intégration et programmation des systèmes liés à l'interface utilisateur.", "Intégration des assets graphiques 2D, modèles 3D, animation et mise en place de leur bon fonctionnement."],
+                    image_url: "img/delight/8CVRUtlJ4gTsEGalixDkgCrILk.webp",
+                    video_url: "https://www.youtube.com/watch?v=Ls7xzg5Ivjg" // URL d'exemple (à remplacer)
+                },
+                content_en: {
+                    title: "Delight: Narrative Engine, DOTS/ECS, and Optimization",
+                    metrics: [{label: "Engine", value: "Unity DOTS"}, {label: "Genre", value: "Iso. Adventure"}, {label: "Role", value: "Lead Tech"}],
+                    description: "Delight is a narrative adventure game where the technical complexity lies in managing vast environments and thousands of interactive objects. I designed the architecture to leverage DOTS (Data-Oriented Tech Stack) to maintain stable console performance at 60 FPS.",
+                    key_points: ["Design and implementation of the non-linear Quest/Dialogue system (ScriptableObjects).", "Full ECS architecture for physical simulation and game logic.", "Profiling and optimization of Draw Calls for open environments.", "Development of editor tools for narrative Level Design."],
+                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=Delight+%7C+Video+Game",
+                    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
+                }
+            },
+            {
+                id: "hardclub", category: "jeux_video", tags: ["Unity", "C#", "RogueLike", "2D Pixel Art"],
+                name: { fr: "Hard Club Mama", en: "Hard Club Mama" },
+                content_fr: {
+                    title: "Hard Club Mama : Prototype Multijoueur",
+                    metrics: [{label: "Langage", value: "C#"}, {label: "Genre", value: "Rogue-Like"}, {label: "Rôle", value: "System Prog."}],
+                    description: "Hard Club Mama est un jeu vidéo Roguelike où vous jouez une vieille bigoudène agacée par le bruit de la boîte de nuit près de son restaurant. Elle décide donc d'aller au club pour ramener le calme avec sa Poêle. Je suis arrivé sur ce projet pendant la production et j'ai principalement effectué le débogage de code, la programmation d'interface utilisateur, la conception de niveaux et quelques tâches courtes entre cela, comme le système de score. J'ai également créé le système d'objets et de pouvoirs.",
+                    key_points: ["Conception et intégration du système d'objets et d'amélioration", "Intégration de l'interface utilisateur.", "Bugtracking et resolution de bugs."],
+                    image_url: "img/hcm/D6ZmJsHtsFCjqaeGNNFTOU8HWE.webp",
+                    video_url: "https://www.youtube.com/watch?v=WQLtPr5K6Vc"
+                },
+                content_en: {
+                    title: "Hard Club Mama: Multiplayer Prototype",
+                    metrics: [{label: "Language", value: "C++"}, {label: "Feature", value: "Replication"}, {label: "Architecture", value: "Client-Server"}],
+                    description: "Online fighting game prototype. Designed and implemented state replication for combat and movement mechanics.",
+                    key_points: ["Server authority implementation for collisions and damage.", "Synchronization of animations and visual effects over the network.", "Bandwidth optimization with targeted replicated variables."],
+                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Hard+Club+Mama+%7C+C%2B%2B+Networking",
+                    video_url: null
+                }
+            },
+            {
+                id: "discosmos", category: "jeux_video", tags: ["Unity", "MOBA", "Network", "2 Mois"],
+                name: { fr: "Discosmos", en: "Discosmos" },
+                content_fr: {
+                    title: "Discosmos : Effets Visuels et Rendu 2D",
+                    metrics: [{label: "Pipeline", value: "URP"}, {label: "Technique", value: "Post-Processing"}, {label: "Thème", value: "Cyberpunk"}],
+                    description: "Jeu d'arcade 2D. En charge du rendu graphique. Création d'un pipeline de rendu personnalisé pour simuler un affichage CRT défectueux.",
+                    key_points: ["Développement de Shaders pour l'effet de distorsion et le bruit analogique.", "Optimisation du rendu pour les mobiles (utilisation du GPU Instancing).", "Intégration du système d'éclairage dynamique 2D d'Unity."],
+                    image_url: "img/discosmos/kllkFt6CmeJ3jCbiBypnjSG6YM.webp",
+                    video_url: null
+                },
+                content_en: {
+                    title: "Discosmos: Visual Effects and 2D Rendering",
+                    metrics: [{label: "Pipeline", value: "URP"}, {label: "Technique", value: "Post-Processing"}, {label: "Thème", value: "Cyberpunk"}],
+                    description: "2D arcade game. In charge of graphic rendering. Created a custom rendering pipeline to simulate a faulty CRT display.",
+                    key_points: ["Development of Shaders for distortion effect and analog noise.", "Rendering optimization for mobile devices (using GPU Instancing).", "Integration of Unity's 2D dynamic lighting system."],
+                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=Discosmos+%7C+Shaders+VFX",
+                    video_url: null
+                }
+            },
+            {
+                id: "sweetcouriers", category: "jeux_video", tags: ["Unity", "Party Game", "2 Semaines"],
+                name: { fr: "Sweet Couriers Plushies Express", en: "Sweet Couriers Plushies Express" },
+                content_fr: {
+                    title: "Sweet Couriers Plushies Express : UI/UX et Gameplay Mobile",
+                    metrics: [{label: "Plateforme", value: "iOS/Android"}, {label: "Challenge", value: "Monétisation"}, {label: "Focus", value: "Ergonomie"}],
+                    description: "Jeu mobile de gestion de livraison. J'ai géré l'UI/UX pour maximiser l'engagement et les conversions.",
+                    key_points: ["Conception d'une architecture UI dynamique avec des pools d'objets (Object Pooling).", "Mise en place d'un système de tutoriel progressif basé sur le suivi des événements.", "Optimisation des temps de chargement des assets UI."],
+                    image_url: "img/scpe/xeDFolH5jgQmolPslfarrDGjHKk.webp",
+                    video_url: "https://www.youtube.com/watch?v=SP-mkdgP26Y"
+                },
+                content_en: {
+                    title: "Sweet Couriers Plushies Express: UI/UX and Mobile Gameplay",
+                    metrics: [{label: "Platform", value: "iOS/Android"}, {label: "Challenge", value: "Monetization"}, {label: "Focus", value: "Ergonomics"}],
+                    description: "Mobile delivery management game. I managed the UI/UX to maximize engagement and conversions.",
+                    key_points: ["Design of a dynamic UI architecture using object pooling.", "Implementation of a progressive tutorial system based on event tracking.", "Optimization of UI asset loading times."],
+                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Sweet+Couriers+%7C+Mobile+UI",
+                    video_url: null
+                },
+            },
+            {
+                id: "beatstrike", category: "jeux_video", tags: ["Unity", "Mobile", "Rhythm"],
+                name: { fr: "BeatStrike", en: "BeatStrike" },
+                content_fr: {
+                    title: "BeatStrike : Intégration Audio Rythmique",
+                    metrics: [{label: "Latence", value: "< 20ms"}, {label: "Framework", value: "Tone.js (Simulation)"}, {label: "Focus", value: "Synchro"}],
+                    description: "Jeu de rythme. Défi technique : synchroniser le gameplay avec précision sur la piste audio. Développement d'un moteur de détection de battements.",
+                    key_points: ["Algorithme pour compenser la latence audio sur différentes plateformes.", "Système d'événements rythmiques basé sur le tempo (BPM) de la musique.", "Création d'outils d'éditeur pour le mapping de niveaux basé sur l'audio."],
+                    image_url: "img/beatstrike/rfzP4jfxNWWrdFne4hx1HJDRXg.webp",
+                    video_url: null
+                },
+                content_en: {
+                    title: "BeatStrike: Rhythmic Audio Integration",
+                    metrics: [{label: "Latency", value: "< 20ms"}, {label: "Framework", value: "Tone.js (Simulation)"}, {label: "Focus", value: "Sync"}],
+                    description: "Rhythm game. Technical challenge: precisely synchronize gameplay with the audio track. Developed a beat-detection engine.",
+                    key_points: ["Algorithm to compensate for audio latency on different platforms.", "Rhythmic event system based on music tempo (BPM).", "Creation of editor tools for audio-based level mapping."],
+                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=BeatStrike+%7C+Rhythm+Engine",
+                    video_url: null
+                }
+            },
+            // --- AUTRES PROJETS ---
+            {
+                id: "emberforge", category: "autres", tags: ["Node.js", "Express", "PostgreSQL", "CI/CD"],
+                name: { fr: "EmberForge", en: "EmberForge" },
+                content_fr: {
+                    title: "EmberForge : Outil de Déploiement CI/CD",
+                    metrics: [{label: "Tech", value: "Node/Express"}, {label: "Base de Données", value: "PostgreSQL"}, {label: "Automatisation", value: "Git Hooks"}],
+                    description: "Application web interne pour automatiser le déploiement de microservices. J'ai conçu la pipeline complète d'intégration et de livraison continue.",
+                    key_points: ["Développement d'une API RESTful pour la gestion des hooks Git et des événements.", "Mise en place de tests unitaires et d'intégration automatisés.", "Architecture modulaire et conteneurisée (Docker) pour l'évolutivité."],
+                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=EmberForge+%7C+CI%2FCD+Pipeline",
+                    video_url: null
+                },
+                content_en: {
+                    title: "EmberForge: CI/CD Deployment Tool",
+                    metrics: [{label: "Tech", value: "Node/Express"}, {label: "Database", value: "PostgreSQL"}, {label: "Automation", value: "Git Hooks"}],
+                    description: "Internal web application to automate the deployment of microservices. I designed the complete Continuous Integration and Delivery pipeline.",
+                    key_points: ["Development of a RESTful API for managing Git hooks and events.", "Implementation of automated unit and integration tests.", "Modular and containerized architecture (Docker) for scalability."],
+                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=EmberForge+%7C+CI%2FCD+Pipeline",
+                    video_url: null
+                }
+            },
+            {
+                id: "centralcars", category: "autres", tags: ["React", "TypeScript", "AWS"],
+                name: { fr: "Central Cars Web and Solutions", en: "Central Cars Web and Solutions" },
+                content_fr: {
+                    title: "Central Cars : Plateforme de Gestion de Flotte",
+                    metrics: [{label: "Frontend", value: "React/TS"}, {label: "Scalabilité", value: "Faible Latence"}, {label: "Services", value: "Microservices"}],
+                    description: "Développement d'une interface SaaS pour la gestion de flottes automobiles. Mon travail s'est concentré sur le front-end et l'interaction avec les API de géolocalisation.",
+                    key_points: ["Utilisation de React Hooks et Context API pour une gestion d'état performante.", "Intégration de librairies de cartographie et d'itinéraires (Mapbox/Leaflet).", "Mise en place de composants réutilisables basés sur un design system."],
+                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Central+Cars+%7C+React+SaaS",
+                    video_url: null
+                },
+                content_en: {
+                    title: "Central Cars Web and Solutions: Fleet Management Platform",
+                    metrics: [{label: "Frontend", value: "React/TS"}, {label: "Scalability", value: "Low Latency"}, {label: "Services", value: "Microservices"}],
+                    description: "Development of a SaaS interface for managing vehicle fleets. My work focused on the front-end and interaction with geolocation APIs.",
+                    key_points: ["Use of React Hooks and Context API for efficient state management.", "Integration of mapping and routing libraries (Mapbox/Leaflet).", "Implementation of reusable components based on a design system."],
+                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Central+Cars+%7C+React+SaaS",
+                    video_url: null
+                }
+            }
+        ];
+
+        let currentLang = 'fr';
+
+        // Fonction pour traduire le contenu de la page
+        function switchLanguage() {
+            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
+            updateContent();
+        }
+
+        // Fonction principale pour mettre à jour tout le contenu
+        function updateContent() {
+            const langData = translations[currentLang];
+            const toggleButton = document.getElementById('lang-toggle');
+
+            // 1. Traduction des éléments statiques
+            document.getElementById('page-title').textContent = langData.title;
+            // Mise à jour du titre principal avec le dégradé et le curseur clignotant
+            document.getElementById('hero-title').innerHTML = `
+                <span class="gradient-title">${langData.hero_title}</span>
+                <span class="blinking-cursor blinking-cursor-color">|</span>
+            `;
+            document.getElementById('hero-subtitle').textContent = langData.hero_subtitle;
+            document.getElementById('skills-title').textContent = langData.skills_title;
+            document.getElementById('vg-title').textContent = langData.project_video_games;
+            document.getElementById('other-title').textContent = langData.project_other;
+            document.getElementById('contact-link').textContent = langData.contact_me;
+            document.getElementById('contact-text-p').textContent = langData.contact_text;
+            toggleButton.textContent = translations[currentLang === 'fr' ? 'en' : 'fr'].lang_button;
+
+            // 2. Traduction des boutons "En savoir plus" et re-rendu des projets
+            document.querySelectorAll('.learn-more-btn').forEach(button => {
+                button.textContent = langData.learn_more;
+            });
+            
+            // 3. Affichage des compétences
+            renderSkills(langData.skills);
+
+            // 4. Affichage des projets
+            renderProjects();
+        }
 
 
-<body>
+        // Fonction pour afficher les compétences
+        function renderSkills(skills) {
+            const container = document.getElementById('skills-container');
+            container.innerHTML = skills.map(skill => `
+                <div class="p-6 bg-[var(--color-card-bg)] rounded-xl border border-[var(--color-border)] shadow-md hover:border-accent-secondary transition duration-300">
+                    <h3 class="text-xl font-bold text-accent-secondary mb-2">${skill.name}</h3>
+                    <p class="text-gray-400">${skill.desc}</p>
+                </div>
+            `).join('');
+        }
 
-<i class="fa fa-chevron-up" id="goTopBtn" onclick="topFunction()"></i>
+        // Fonction pour afficher les projets
+        function renderProjects() {
+            const vgContainer = document.getElementById('video-games-container');
+            const otherContainer = document.getElementById('other-projects-container');
+            vgContainer.innerHTML = '';
+            otherContainer.innerHTML = '';
 
-<section class="header">
-<nav>
-    <a href="index.html"><img src="img/logo.png" alt="Djason NATHIEZ"></a>
-    <h1>Djason NATHIEZ</h1>
-</nav>
-    <div class="text-box">
-        <h1>Djason NATHIEZ</h1>
-        <p> Hi, I'm Djason ! I'm a Game Programmer working mainly with Unity and specialized in Network Programming.</p>
-        <a href="https://djason-nathiez.framer.ai" class="hero-btn">Portfolio</a>
-        <a href="./RESUME_NATHIEZ_DJASON.pdf" class="hero-btn" target="_blank">Resume</a>
-        <br>
-        <img src="img/unity-logo.png">
-        <img src="img/unreal-logo.png">
-        <img src="img/git-logo.png">
+            const langData = translations[currentLang];
+
+            projectsData.forEach(project => {
+                const content = project[`content_${currentLang}`];
+
+                const cardHtml = `
+                    <div class="project-card rounded-xl shadow-xl flex flex-col">
+                        <!-- Image Vignette -->
+                        <img src="${content.image_url}" alt="Visuel de ${project.name[currentLang]}" class="card-image rounded-t-xl">
+                        
+                        <div class="p-6 flex flex-col justify-between flex-grow">
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2 text-accent-main">${project.name[currentLang]}</h3>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    ${project.tags.map(tag => `<span class="px-3 py-1 text-xs font-medium rounded-full bg-[var(--color-border)] text-[var(--color-text-light)]">${tag}</span>`).join('')}
+                                </div>
+                            </div>
+                            <button onclick="openModal('${project.id}')"
+                                class="learn-more-btn mt-4 w-full py-2 rounded-lg bg-[var(--color-accent-blue)] hover:bg-[#3488d8] text-white font-semibold transition duration-200 shadow-md shadow-[var(--color-accent-blue)]/30">
+                                ${langData.learn_more}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                if (project.category === 'jeux_video') {
+                    vgContainer.innerHTML += cardHtml;
+                } else if (project.category === 'autres') {
+                    otherContainer.innerHTML += cardHtml;
+                }
+            });
+        }
+
+        // Fonction pour ouvrir la modale
+        function openModal(projectId) {
+            const project = projectsData.find(p => p.id === projectId);
+            if (!project) return;
+
+            const content = project[`content_${currentLang}`];
+            const langData = translations[currentLang];
+            const modal = document.getElementById('projectModal');
+            const modalBody = document.getElementById('modal-body');
+
+            // Création des metrics
+            const metricsHtml = content.metrics.map(m => `
+                <div class="p-4 bg-[var(--color-card-bg)] rounded-lg text-center border-b-2 border-accent-main">
+                    <div class="text-3xl font-extrabold text-accent-main">${m.value}</div>
+                    <p class="text-sm text-gray-400 mt-1">${m.label}</p>
+                </div>
+            `).join('');
+
+            // Création des points clés
+            const keyPointsHtml = content.key_points.map(p => `
+                <li class="flex items-start space-x-2 text-gray-300">
+                    <!-- Icône customisée pour le thème sombre -->
+                    <svg class="w-5 h-5 mt-1 flex-shrink-0 text-accent-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>${p}</span>
+                </li>
+            `).join('');
+            
+            // HTML du bouton vidéo (affiché seulement si video_url est présent)
+            const videoButtonHtml = content.video_url ? 
+                `<a href="${content.video_url}" target="_blank" 
+                   class="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-lg bg-accent-main hover:bg-[#d97c27] text-white font-semibold transition duration-200 shadow-md shadow-accent-main/30 mt-6 mb-8 w-full sm:w-auto">
+                    <!-- Icône de lecture -->
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                    <span>${langData.watch_video}</span>
+                </a>`
+                : '';
+
+            // HTML pour l'image statique
+            const mediaHtml = `<div class="aspect-video bg-[#1f1727] rounded-xl shadow-2xl mb-8 p-2 border border-[var(--color-accent-blue)]">
+                <img src="${content.image_url.replace('150', '338')}" alt="Visuel du projet ${content.title}" class="w-full h-full object-cover rounded-lg">
+            </div>`;
+
+
+            modalBody.innerHTML = `
+                <h2 class="text-4xl font-extrabold gradient-title mb-6">${content.title}</h2>
+
+                <!-- CONTENU MEDIA IMAGE -->
+                ${mediaHtml}
+                
+                <!-- BOUTON VIDEO CONDITIONNEL -->
+                <div class="text-center">
+                    ${videoButtonHtml}
+                </div>
+
+                <p class="text-lg text-gray-300 mb-8">${content.description}</p>
+
+                <!-- Metrics Clés -->
+                <h3 class="text-2xl font-bold text-accent-main mb-4">Metrics de Développement</h3>
+                <div class="grid grid-cols-3 gap-4 mb-10">
+                    ${metricsHtml}
+                </div>
+
+                <!-- Points Clés -->
+                <h3 class="text-2xl font-bold text-accent-main mb-4">Points Techniques Abordés</h3>
+                <ul class="space-y-4 list-none pl-0">
+                    ${keyPointsHtml}
+                </ul>
+            `;
+
+            document.getElementById('modal-close-btn').textContent = langData.modal_close;
+            modal.classList.remove('hidden');
+        }
+
+        // Fonction pour fermer la modale
+        function closeModal() {
+            document.getElementById('projectModal').classList.add('hidden');
+        }
+
+        // Initialisation au chargement de la page
+        window.onload = () => {
+            updateContent();
+        };
+    </script>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- Structure HTML Principale -->
+    <!-- ---------------------------------------------------- -->
+
+    <!-- En-tête/Navigation -->
+    <header class="bg-[var(--color-card-bg)] py-4 shadow-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-gray-100">
+                Djason NATHIEZ
+            </h1>
+            <nav class="flex space-x-4 items-center">
+                <a id="contact-link" href="#contact" class="px-4 py-2 rounded-full bg-[var(--color-accent-blue)] text-white text-sm font-semibold hover:bg-[#3488d8] transition duration-200 shadow-md shadow-[var(--color-accent-blue)]/30">
+                    Me Contacter
+                </a>
+                <button id="lang-toggle" onclick="switchLanguage()"
+                    class="px-4 py-2 rounded-full border border-[var(--color-border)] text-gray-200 text-sm hover:bg-[#21262d] transition duration-200">
+                    English
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+        <!-- Section 1: Héro/Introduction -->
+        <section class="text-center mb-20 pt-10 animate-slide-in">
+            <p id="hero-subtitle" class="text-xl text-accent-secondary font-medium mb-3">Développeur de Jeux et Architecte Logiciel</p>
+            <h2 id="hero-title" class="text-6xl sm:text-7xl font-extrabold leading-tight">
+                <!-- Le titre (avec dégradé) et le curseur clignotant seront insérés ici par JavaScript -->
+            </h2>
+            <p class="mt-6 max-w-3xl mx-auto text-xl text-gray-400">
+                Spécialisé dans le développement d'architectures de systèmes robustes et performants (C#, C++, TypeScript). Expert en optimisation de code et en pipeline CI/CD.
+            </p>
+        </section>
+        
+        <!-- Section 2: Compétences Techniques Clés -->
+        <section id="skills" class="mb-20">
+            <h2 id="skills-title" class="text-4xl font-bold text-accent-main mb-8 border-b border-[var(--color-border)] pb-3 animate-slide-in">Compétences Techniques Clés</h2>
+            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Les compétences seront insérées ici par JavaScript -->
+            </div>
+        </section>
+
+
+        <!-- Section 3: Projets Jeux Vidéo -->
+        <section class="mb-16">
+            <h2 id="vg-title" class="text-4xl font-bold text-accent-main mb-8 border-b border-[var(--color-border)] pb-3 animate-slide-in">Projets Jeux Vidéo</h2>
+            <div id="video-games-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Les cartes de projets seront insérées ici par JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 4: Autres Projets -->
+        <section class="mb-16">
+            <h2 id="other-title" class="text-4xl font-bold text-accent-main mb-8 border-b border-[var(--color-border)] pb-3 animate-slide-in">Autres Projets</h2>
+            <div id="other-projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Les cartes de projets seront insérées ici par JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 5: Contact -->
+        <section id="contact" class="pt-16 pb-10 text-center border-t border-[var(--color-border)]">
+            <h2 class="text-4xl font-bold text-accent-main mb-4">Travaillons Ensemble</h2>
+            <p id="contact-text-p" class="text-lg text-gray-400 mb-8">
+                Vous avez un défi d'architecture de jeu ou un besoin d'optimisation ? Contactez-moi !
+            </p>
+            <a href="mailto:votre.email@exemple.com" class="px-10 py-4 rounded-full bg-accent-main text-white font-semibold text-lg hover:bg-[#d97c27] transition duration-300 shadow-xl shadow-accent-main/40">
+                votre.email@exemple.com
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Modale (Pop-up) Dynamique pour les Détails de Projet -->
+    <div id="projectModal" class="modal fixed inset-0 hidden flex items-center justify-center p-4">
+        <div class="modal-content w-full max-w-4xl rounded-2xl p-6 md:p-10 shadow-3xl transform transition-all">
+            <!-- Bouton de fermeture -->
+            <div class="flex justify-end">
+                <button onclick="closeModal()"
+                    class="text-gray-400 hover:text-white transition duration-200">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <!-- Contenu dynamique du projet -->
+            <div id="modal-body" class="mt-2">
+                <!-- Le contenu (titre, média conditionnel, description, points clés) sera injecté ici par JS -->
+            </div>
+
+            <!-- Bouton de fermeture en bas -->
+            <div class="mt-8 text-center">
+                <button onclick="closeModal()" class="px-8 py-3 rounded-full border border-[var(--color-border)] text-gray-200 font-semibold hover:bg-[#21262d] transition duration-200">
+                    <span id="modal-close-btn">Fermer</span>
+                </button>
+            </div>
+        </div>
     </div>
-</section>
+
+</body>
+</html>
