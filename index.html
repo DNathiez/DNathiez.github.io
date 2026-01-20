@@ -2,566 +2,632 @@
 <html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Mon Portfolio de Développeur</title>
-    <!-- Chargement de Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Djason Nathiez | Game Engineer & Founder</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Chargement de la police Roboto via Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
-        
-        /* Définition des couleurs améliorées pour le thème sombre */
         :root {
-            --color-bg-dark: #0d1117; /* Fond très sombre (Git Dark) */
-            --color-text-light: #c9d1d9; /* Texte clair */
-            --color-card-bg: #161b22; /* Fond Card sombre */
-            --color-border: #30363d; /* Bordures sombres */
-            --color-accent-blue: #46a0f8; /* Bleu percutant */
-            --color-accent-orange: #f7a040; /* Orange riche */
+            --color-primary: #f59e0b;
+            --bg-dark: #070708;
+            --card-bg: #0f0f12;
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         body {
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            background-color: var(--color-bg-dark);
-            color: var(--color-text-light);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #e2e8f0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
-        
-        /* Classes Tailwind personnalisées basées sur les variables CSS */
-        .text-accent-main { color: var(--color-accent-orange); } 
-        .text-accent-secondary { color: var(--color-accent-blue); }
-        
-        /* Dégradé pour le titre principal */
-        .gradient-title {
-            background: linear-gradient(90deg, var(--color-accent-orange), var(--color-accent-blue));
+
+        .bg-grain::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.015;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #ea580c 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .project-card {
-            background-color: var(--color-card-bg);
-            border: 1px solid var(--color-border);
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s;
-            overflow: hidden;
-            position: relative;
-        }
-        .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(247, 160, 64, 0.15); /* Utilise la couleur accent orange pour l'ombre */
-            border-color: var(--color-accent-orange);
-        }
-        .card-image {
-            height: 150px;
-            object-fit: cover;
-            width: 100%;
-            transition: opacity 0.3s;
-        }
-        .project-card:hover .card-image {
-            opacity: 0.8;
-        }
-        /* Style pour la modale */
-        .modal {
-            background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-        }
-        .modal-content {
-            background-color: var(--color-bg-dark);
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 2px solid var(--color-accent-blue);
-        }
-        .code-block {
-            background-color: #21262d; /* Couleur légèrement plus claire pour le bloc de code */
-            border-left: 4px solid var(--color-accent-orange);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            white-space: pre-wrap;
-            font-family: monospace;
-            font-size: 0.875rem;
-            overflow-x: auto;
-            color: var(--color-text-light);
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
         }
 
-        /* --- Effet Curseur Clignotant --- */
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-        .blinking-cursor {
+        .reveal.active {
             opacity: 1;
-            font-weight: 400;
-            animation: blink 0.75s step-end infinite;
-            display: inline-block;
-            margin-left: 5px;
+            transform: translateY(0);
         }
-        .blinking-cursor-color {
-            color: var(--color-text-light);
+
+        #mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.5s var(--ease-out-expo);
+        }
+
+        #mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 30s linear infinite;
+        }
+
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        .modal-overlay {
+            background: rgba(4, 4, 5, 0.98);
+            backdrop-filter: blur(20px);
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        .hide-scroll::-webkit-scrollbar { display: none; }
+
+        #modal-image, #modal-video-container {
+            transition: opacity 0.3s ease-in-out;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-grain">
 
-    <!-- Données de Traduction et de Projet -->
-    <script>
-        const translations = {
-            fr: {
-                title: "Mon Portfolio de Développeur",
-                lang_button: "English",
-                hero_title: "Bonjour, je suis Djason NATHIEZ",
-                hero_subtitle: "Développeur de Jeux et Architecte Logiciel",
-                skills_title: "Compétences Techniques Clés",
-                project_video_games: "Projets Jeux Vidéo",
-                project_other: "Autres Projets",
-                learn_more: "En savoir plus...",
-                modal_close: "Fermer",
-                contact_me: "Me Contacter",
-                contact_text: "Vous avez un défi d'architecture de jeu ou un besoin d'optimisation ? Contactez-moi !",
-                watch_video: "Voir la Vidéo de Démo",
-                skills: [
-                    { name: "C# & Unity", desc: "Développement C# et utilisateur du moteur 3D Unity." },
-                    { name: "Network & Database", desc: "Architecture de programmation réseau et base de données." },
-                    { name: "IA & FSM", desc: "Conception de comportements ennemis complexes (Machine à États Finis, NavMesh)." },
-                    { name: "Web & Python", desc: "Site web et outils utilitaire en python." }
-                ]
-            },
-            en: {
-                title: "My Developer Portfolio",
-                lang_button: "Français",
-                hero_title: "Hello, I'm Djason NATHIEZ",
-                hero_subtitle: "Game Developer and Software Architect",
-                skills_title: "Key Technical Skills",
-                project_video_games: "Video Game Projects",
-                project_other: "Other Projects",
-                learn_more: "Learn More...",
-                modal_close: "Close",
-                contact_me: "Contact Me",
-                contact_text: "Have a game architecture challenge or need optimization? Contact me!",
-                watch_video: "Watch Demo Video",
-                skills: [
-                    { name: "C# & Unity DOTS/ECS", desc: "Modular architecture and data-oriented systems for high performance." },
-                    { name: "Unreal Engine & C++", desc: "Multiplayer development (state replication) and native C++ combat systems." },
-                    { name: "Web Backend", desc: "Node.js (Express), PostgreSQL, Docker, and CI/CD pipelines." },
-                    { name: "Optimization & Shaders", desc: "Profiling, Draw Call reduction, and URP/HLSL Shader creation." },
-                    { name: "AI & FSM", desc: "Design of complex enemy behaviors (Finite State Machine, NavMesh)." }
-                ]
-            }
-        };
-
-        const projectsData = [
-            // --- PROJET DELIGHT MIS À JOUR AVEC LIEN VIDÉO ET NOUVELLES INFOS ---
-            {
-                id: "delight", category: "jeux_video", tags: ["Unity", "C#", "Aventure", "3 Mois"],
-                name: { fr: "Delight", en: "Delight" },
-                content_fr: {
-                    title: "Delight",
-                    metrics: [{label: "Moteur", value: "Unity 3D"}, {label: "Genre", value: "Aventure"}, {label: "Rôle", value: "Gameplay Prog."}],
-                    description: "Delight est un jeu d'action-aventure similaire à Zelda où vous incarnez Kent, un jeune raton laveur à la recherche de son père disparu. En errant dans le parc abandonné de Delight, vous devez faire face aux automates qui ont pris le contrôle de la région et résoudre des énigmes avec votre câble. Ce projet était ma première expérience en 3D, développé sur Unity, mais également la première fois que j'étais programmeur à temps plein sur un projet. Le résultat de ce projet devait être un prototype que nous devions développer en 4 mois avec une équipe de 11 personnes.",
-                    key_points: ["Conception et implémentation du contrôleur du personnage-joueur.", "Conception et implémentation des IA (ennemis) et algorithme de machine à état.", "Intégration et programmation des systèmes liés à l'interface utilisateur.", "Intégration des assets graphiques 2D, modèles 3D, animation et mise en place de leur bon fonctionnement."],
-                    image_url: "img/delight/8CVRUtlJ4gTsEGalixDkgCrILk.webp",
-                    video_url: "https://www.youtube.com/watch?v=Ls7xzg5Ivjg" // URL d'exemple (à remplacer)
-                },
-                content_en: {
-                    title: "Delight: Narrative Engine, DOTS/ECS, and Optimization",
-                    metrics: [{label: "Engine", value: "Unity DOTS"}, {label: "Genre", value: "Iso. Adventure"}, {label: "Role", value: "Lead Tech"}],
-                    description: "Delight is a narrative adventure game where the technical complexity lies in managing vast environments and thousands of interactive objects. I designed the architecture to leverage DOTS (Data-Oriented Tech Stack) to maintain stable console performance at 60 FPS.",
-                    key_points: ["Design and implementation of the non-linear Quest/Dialogue system (ScriptableObjects).", "Full ECS architecture for physical simulation and game logic.", "Profiling and optimization of Draw Calls for open environments.", "Development of editor tools for narrative Level Design."],
-                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=Delight+%7C+Video+Game",
-                    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
-                }
-            },
-            {
-                id: "hardclub", category: "jeux_video", tags: ["Unity", "C#", "RogueLike", "2D Pixel Art"],
-                name: { fr: "Hard Club Mama", en: "Hard Club Mama" },
-                content_fr: {
-                    title: "Hard Club Mama : Prototype Multijoueur",
-                    metrics: [{label: "Langage", value: "C#"}, {label: "Genre", value: "Rogue-Like"}, {label: "Rôle", value: "System Prog."}],
-                    description: "Hard Club Mama est un jeu vidéo Roguelike où vous jouez une vieille bigoudène agacée par le bruit de la boîte de nuit près de son restaurant. Elle décide donc d'aller au club pour ramener le calme avec sa Poêle. Je suis arrivé sur ce projet pendant la production et j'ai principalement effectué le débogage de code, la programmation d'interface utilisateur, la conception de niveaux et quelques tâches courtes entre cela, comme le système de score. J'ai également créé le système d'objets et de pouvoirs.",
-                    key_points: ["Conception et intégration du système d'objets et d'amélioration", "Intégration de l'interface utilisateur.", "Bugtracking et resolution de bugs."],
-                    image_url: "img/hcm/D6ZmJsHtsFCjqaeGNNFTOU8HWE.webp",
-                    video_url: "https://www.youtube.com/watch?v=WQLtPr5K6Vc"
-                },
-                content_en: {
-                    title: "Hard Club Mama: Multiplayer Prototype",
-                    metrics: [{label: "Language", value: "C++"}, {label: "Feature", value: "Replication"}, {label: "Architecture", value: "Client-Server"}],
-                    description: "Online fighting game prototype. Designed and implemented state replication for combat and movement mechanics.",
-                    key_points: ["Server authority implementation for collisions and damage.", "Synchronization of animations and visual effects over the network.", "Bandwidth optimization with targeted replicated variables."],
-                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Hard+Club+Mama+%7C+C%2B%2B+Networking",
-                    video_url: null
-                }
-            },
-            {
-                id: "discosmos", category: "jeux_video", tags: ["Unity", "MOBA", "Network", "2 Mois"],
-                name: { fr: "Discosmos", en: "Discosmos" },
-                content_fr: {
-                    title: "Discosmos : Effets Visuels et Rendu 2D",
-                    metrics: [{label: "Pipeline", value: "URP"}, {label: "Technique", value: "Post-Processing"}, {label: "Thème", value: "Cyberpunk"}],
-                    description: "Jeu d'arcade 2D. En charge du rendu graphique. Création d'un pipeline de rendu personnalisé pour simuler un affichage CRT défectueux.",
-                    key_points: ["Développement de Shaders pour l'effet de distorsion et le bruit analogique.", "Optimisation du rendu pour les mobiles (utilisation du GPU Instancing).", "Intégration du système d'éclairage dynamique 2D d'Unity."],
-                    image_url: "img/discosmos/kllkFt6CmeJ3jCbiBypnjSG6YM.webp",
-                    video_url: null
-                },
-                content_en: {
-                    title: "Discosmos: Visual Effects and 2D Rendering",
-                    metrics: [{label: "Pipeline", value: "URP"}, {label: "Technique", value: "Post-Processing"}, {label: "Thème", value: "Cyberpunk"}],
-                    description: "2D arcade game. In charge of graphic rendering. Created a custom rendering pipeline to simulate a faulty CRT display.",
-                    key_points: ["Development of Shaders for distortion effect and analog noise.", "Rendering optimization for mobile devices (using GPU Instancing).", "Integration of Unity's 2D dynamic lighting system."],
-                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=Discosmos+%7C+Shaders+VFX",
-                    video_url: null
-                }
-            },
-            {
-                id: "sweetcouriers", category: "jeux_video", tags: ["Unity", "Party Game", "2 Semaines"],
-                name: { fr: "Sweet Couriers Plushies Express", en: "Sweet Couriers Plushies Express" },
-                content_fr: {
-                    title: "Sweet Couriers Plushies Express : UI/UX et Gameplay Mobile",
-                    metrics: [{label: "Plateforme", value: "iOS/Android"}, {label: "Challenge", value: "Monétisation"}, {label: "Focus", value: "Ergonomie"}],
-                    description: "Jeu mobile de gestion de livraison. J'ai géré l'UI/UX pour maximiser l'engagement et les conversions.",
-                    key_points: ["Conception d'une architecture UI dynamique avec des pools d'objets (Object Pooling).", "Mise en place d'un système de tutoriel progressif basé sur le suivi des événements.", "Optimisation des temps de chargement des assets UI."],
-                    image_url: "img/scpe/xeDFolH5jgQmolPslfarrDGjHKk.webp",
-                    video_url: "https://www.youtube.com/watch?v=SP-mkdgP26Y"
-                },
-                content_en: {
-                    title: "Sweet Couriers Plushies Express: UI/UX and Mobile Gameplay",
-                    metrics: [{label: "Platform", value: "iOS/Android"}, {label: "Challenge", value: "Monetization"}, {label: "Focus", value: "Ergonomics"}],
-                    description: "Mobile delivery management game. I managed the UI/UX to maximize engagement and conversions.",
-                    key_points: ["Design of a dynamic UI architecture using object pooling.", "Implementation of a progressive tutorial system based on event tracking.", "Optimization of UI asset loading times."],
-                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Sweet+Couriers+%7C+Mobile+UI",
-                    video_url: null
-                },
-            },
-            {
-                id: "beatstrike", category: "jeux_video", tags: ["Unity", "Mobile", "Rhythm"],
-                name: { fr: "BeatStrike", en: "BeatStrike" },
-                content_fr: {
-                    title: "BeatStrike : Intégration Audio Rythmique",
-                    metrics: [{label: "Latence", value: "< 20ms"}, {label: "Framework", value: "Tone.js (Simulation)"}, {label: "Focus", value: "Synchro"}],
-                    description: "Jeu de rythme. Défi technique : synchroniser le gameplay avec précision sur la piste audio. Développement d'un moteur de détection de battements.",
-                    key_points: ["Algorithme pour compenser la latence audio sur différentes plateformes.", "Système d'événements rythmiques basé sur le tempo (BPM) de la musique.", "Création d'outils d'éditeur pour le mapping de niveaux basé sur l'audio."],
-                    image_url: "img/beatstrike/rfzP4jfxNWWrdFne4hx1HJDRXg.webp",
-                    video_url: null
-                },
-                content_en: {
-                    title: "BeatStrike: Rhythmic Audio Integration",
-                    metrics: [{label: "Latency", value: "< 20ms"}, {label: "Framework", value: "Tone.js (Simulation)"}, {label: "Focus", value: "Sync"}],
-                    description: "Rhythm game. Technical challenge: precisely synchronize gameplay with the audio track. Developed a beat-detection engine.",
-                    key_points: ["Algorithm to compensate for audio latency on different platforms.", "Rhythmic event system based on music tempo (BPM).", "Creation of editor tools for audio-based level mapping."],
-                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=BeatStrike+%7C+Rhythm+Engine",
-                    video_url: null
-                }
-            },
-            // --- AUTRES PROJETS ---
-            {
-                id: "emberforge", category: "autres", tags: ["Node.js", "Express", "PostgreSQL", "CI/CD"],
-                name: { fr: "EmberForge", en: "EmberForge" },
-                content_fr: {
-                    title: "EmberForge : Outil de Déploiement CI/CD",
-                    metrics: [{label: "Tech", value: "Node/Express"}, {label: "Base de Données", value: "PostgreSQL"}, {label: "Automatisation", value: "Git Hooks"}],
-                    description: "Application web interne pour automatiser le déploiement de microservices. J'ai conçu la pipeline complète d'intégration et de livraison continue.",
-                    key_points: ["Développement d'une API RESTful pour la gestion des hooks Git et des événements.", "Mise en place de tests unitaires et d'intégration automatisés.", "Architecture modulaire et conteneurisée (Docker) pour l'évolutivité."],
-                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=EmberForge+%7C+CI%2FCD+Pipeline",
-                    video_url: null
-                },
-                content_en: {
-                    title: "EmberForge: CI/CD Deployment Tool",
-                    metrics: [{label: "Tech", value: "Node/Express"}, {label: "Database", value: "PostgreSQL"}, {label: "Automation", value: "Git Hooks"}],
-                    description: "Internal web application to automate the deployment of microservices. I designed the complete Continuous Integration and Delivery pipeline.",
-                    key_points: ["Development of a RESTful API for managing Git hooks and events.", "Implementation of automated unit and integration tests.", "Modular and containerized architecture (Docker) for scalability."],
-                    image_url: "https://placehold.co/600x150/f7a040/0d1117?text=EmberForge+%7C+CI%2FCD+Pipeline",
-                    video_url: null
-                }
-            },
-            {
-                id: "centralcars", category: "autres", tags: ["React", "TypeScript", "AWS"],
-                name: { fr: "Central Cars Web and Solutions", en: "Central Cars Web and Solutions" },
-                content_fr: {
-                    title: "Central Cars : Plateforme de Gestion de Flotte",
-                    metrics: [{label: "Frontend", value: "React/TS"}, {label: "Scalabilité", value: "Faible Latence"}, {label: "Services", value: "Microservices"}],
-                    description: "Développement d'une interface SaaS pour la gestion de flottes automobiles. Mon travail s'est concentré sur le front-end et l'interaction avec les API de géolocalisation.",
-                    key_points: ["Utilisation de React Hooks et Context API pour une gestion d'état performante.", "Intégration de librairies de cartographie et d'itinéraires (Mapbox/Leaflet).", "Mise en place de composants réutilisables basés sur un design system."],
-                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Central+Cars+%7C+React+SaaS",
-                    video_url: null
-                },
-                content_en: {
-                    title: "Central Cars Web and Solutions: Fleet Management Platform",
-                    metrics: [{label: "Frontend", value: "React/TS"}, {label: "Scalability", value: "Low Latency"}, {label: "Services", value: "Microservices"}],
-                    description: "Development of a SaaS interface for managing vehicle fleets. My work focused on the front-end and interaction with geolocation APIs.",
-                    key_points: ["Use of React Hooks and Context API for efficient state management.", "Integration of mapping and routing libraries (Mapbox/Leaflet).", "Implementation of reusable components based on a design system."],
-                    image_url: "https://placehold.co/600x150/46a0f8/0d1117?text=Central+Cars+%7C+React+SaaS",
-                    video_url: null
-                }
-            }
-        ];
-
-        let currentLang = 'fr';
-
-        // Fonction pour traduire le contenu de la page
-        function switchLanguage() {
-            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
-            updateContent();
-        }
-
-        // Fonction principale pour mettre à jour tout le contenu
-        function updateContent() {
-            const langData = translations[currentLang];
-            const toggleButton = document.getElementById('lang-toggle');
-
-            // 1. Traduction des éléments statiques
-            document.getElementById('page-title').textContent = langData.title;
-            // Mise à jour du titre principal avec le dégradé et le curseur clignotant
-            document.getElementById('hero-title').innerHTML = `
-                <span class="gradient-title">${langData.hero_title}</span>
-                <span class="blinking-cursor blinking-cursor-color">|</span>
-            `;
-            document.getElementById('hero-subtitle').textContent = langData.hero_subtitle;
-            document.getElementById('skills-title').textContent = langData.skills_title;
-            document.getElementById('vg-title').textContent = langData.project_video_games;
-            document.getElementById('other-title').textContent = langData.project_other;
-            document.getElementById('contact-link').textContent = langData.contact_me;
-            document.getElementById('contact-text-p').textContent = langData.contact_text;
-            toggleButton.textContent = translations[currentLang === 'fr' ? 'en' : 'fr'].lang_button;
-
-            // 2. Traduction des boutons "En savoir plus" et re-rendu des projets
-            document.querySelectorAll('.learn-more-btn').forEach(button => {
-                button.textContent = langData.learn_more;
-            });
-            
-            // 3. Affichage des compétences
-            renderSkills(langData.skills);
-
-            // 4. Affichage des projets
-            renderProjects();
-        }
-
-
-        // Fonction pour afficher les compétences
-        function renderSkills(skills) {
-            const container = document.getElementById('skills-container');
-            container.innerHTML = skills.map(skill => `
-                <div class="p-6 bg-[var(--color-card-bg)] rounded-xl border border-[var(--color-border)] shadow-md hover:border-accent-secondary transition duration-300">
-                    <h3 class="text-xl font-bold text-accent-secondary mb-2">${skill.name}</h3>
-                    <p class="text-gray-400">${skill.desc}</p>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-[100] transition-all duration-500 py-4 sm:py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
+            <div class="flex items-center space-x-3 group cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="bg-gradient-to-br from-amber-500 to-orange-600 p-2 rounded-xl shadow-lg shadow-amber-500/10 transition-all duration-500 group-hover:scale-110">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"></path><path d="m13 19 6-6"></path><path d="m16 22 6-6"></path><circle cx="8" cy="16" r="2"></circle><circle cx="16" cy="8" r="2"></circle></svg>
                 </div>
-            `).join('');
-        }
+                <span class="font-black text-lg sm:text-xl tracking-tighter text-white uppercase">Djason<span class="text-amber-500">.N</span></span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-4 lg:space-x-8">
+                <a href="#heros-dawn" data-key="nav_hero" class="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-amber-500 transition-all">Hero's Dawn</a>
+                <a href="#about" data-key="nav_about" class="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-amber-500 transition-all">Parcours</a>
+                <a href="#games" data-key="nav_games" class="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-amber-500 transition-all">Ludographie</a>
+                
+                <!-- Language Toggle -->
+                <button onclick="toggleLanguage()" class="flex items-center space-x-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10 hover:border-amber-500/50 transition-all">
+                    <span id="lang-flag" class="text-xs">🇫🇷</span>
+                    <span id="lang-text" class="text-[9px] font-black uppercase tracking-widest text-white">FR</span>
+                </button>
 
-        // Fonction pour afficher les projets
-        function renderProjects() {
-            const vgContainer = document.getElementById('video-games-container');
-            const otherContainer = document.getElementById('other-projects-container');
-            vgContainer.innerHTML = '';
-            otherContainer.innerHTML = '';
+                <a href="#contact" data-key="nav_contact" class="px-6 py-2.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all">Contact</a>
+            </div>
 
-            const langData = translations[currentLang];
+            <button id="menu-toggle" class="md:hidden p-3 -mr-2 text-slate-400" aria-label="Menu">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
 
-            projectsData.forEach(project => {
-                const content = project[`content_${currentLang}`];
+        <div id="mobile-menu" class="fixed inset-0 w-full h-screen bg-[#070708] z-[150] md:hidden flex flex-col items-center justify-center space-y-10 px-6 text-center">
+            <button id="menu-close" class="absolute top-6 right-6 p-3 text-slate-400" aria-label="Fermer">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l18 18"></path></svg>
+            </button>
+            <a href="#heros-dawn" data-key="nav_hero" class="text-4xl font-black text-white uppercase tracking-tighter active:text-amber-500">Hero's Dawn</a>
+            <a href="#about" data-key="nav_about" class="text-4xl font-black text-white uppercase tracking-tighter active:text-amber-500">Parcours</a>
+            <a href="#games" data-key="nav_games" class="text-4xl font-black text-white uppercase tracking-tighter active:text-amber-500">Ludographie</a>
+            <a href="#professional" data-key="nav_pro" class="text-4xl font-black text-white uppercase tracking-tighter active:text-amber-500">Web & Pro</a>
+            <a href="#contact" data-key="nav_contact" class="text-4xl font-black text-amber-500 uppercase tracking-tighter">Contact</a>
+            
+            <button onclick="toggleLanguage()" class="mt-8 px-8 py-4 bg-white/5 rounded-2xl border border-white/10 flex items-center space-x-3">
+                <span class="mobile-lang-flag text-2xl">🇫🇷</span>
+                <span class="mobile-lang-text text-lg font-black text-white uppercase">Français</span>
+            </button>
+        </div>
+    </nav>
 
-                const cardHtml = `
-                    <div class="project-card rounded-xl shadow-xl flex flex-col">
-                        <!-- Image Vignette -->
-                        <img src="${content.image_url}" alt="Visuel de ${project.name[currentLang]}" class="card-image rounded-t-xl">
-                        
-                        <div class="p-6 flex flex-col justify-between flex-grow">
-                            <div>
-                                <h3 class="text-2xl font-bold mb-2 text-accent-main">${project.name[currentLang]}</h3>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    ${project.tags.map(tag => `<span class="px-3 py-1 text-xs font-medium rounded-full bg-[var(--color-border)] text-[var(--color-text-light)]">${tag}</span>`).join('')}
-                                </div>
-                            </div>
-                            <button onclick="openModal('${project.id}')"
-                                class="learn-more-btn mt-4 w-full py-2 rounded-lg bg-[var(--color-accent-blue)] hover:bg-[#3488d8] text-white font-semibold transition duration-200 shadow-md shadow-[var(--color-accent-blue)]/30">
-                                ${langData.learn_more}
-                            </button>
+    <!-- Hero Section -->
+    <section class="relative min-h-[100dvh] flex items-center pt-24 pb-12 overflow-hidden">
+        <div class="absolute inset-0 -z-10">
+            <div class="absolute top-[10%] right-[-10%] w-[100vw] h-[100vw] sm:w-[700px] sm:h-[700px] bg-amber-600/10 rounded-full blur-[140px] opacity-60"></div>
+            <div class="absolute bottom-[0%] left-[-10%] w-[100vw] h-[100vw] sm:w-[600px] sm:h-[600px] bg-purple-600/5 rounded-full blur-[140px] opacity-40"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 w-full">
+            <div class="grid lg:grid-cols-2 gap-12 sm:gap-16 items-center">
+                <div class="reveal active">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-amber-500 text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-6 sm:mb-8">
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                        </span>
+                        <span data-key="hero_status">Disponible — Fondateur EmberForge Studio</span>
+                    </div>
+                    <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white mb-6 sm:mb-8 leading-[0.85] tracking-[-0.05em]">
+                        GAME<br />
+                        <span class="text-gradient">ENGINEER</span>
+                    </h1>
+                    <p data-key="hero_desc" class="max-w-md text-base sm:text-lg md:text-xl text-slate-400 mb-8 sm:mb-10 leading-relaxed font-medium italic opacity-85">
+                        Diplômé RUBIKA Supinfogame. Expert en Gameplay Programming et architectures multijoueurs.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                        <a href="#heros-dawn" class="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-amber-500 text-black rounded-2xl font-black uppercase tracking-tighter text-center hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transition-all transform hover:scale-105">
+                            Hero's Dawn
+                        </a>
+                        <a href="#games" data-key="btn_ludo" class="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black uppercase tracking-tighter text-center hover:bg-white/10 transition-all">
+                            Ludographie
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative hidden lg:block reveal">
+                    <div class="relative z-10 w-full aspect-square rounded-[60px] bg-gradient-to-br from-white/10 to-transparent p-1 border border-white/5 shadow-2xl">
+                        <div class="w-full h-full rounded-[58px] bg-[#0a0a0c] overflow-hidden flex items-center justify-center">
+                            <svg class="w-48 xl:w-64 h-48 xl:h-64 text-white/5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4m-2-2v4m7-1h.01m2.99-2h.01"></path></svg>
                         </div>
                     </div>
-                `;
-                if (project.category === 'jeux_video') {
-                    vgContainer.innerHTML += cardHtml;
-                } else if (project.category === 'autres') {
-                    otherContainer.innerHTML += cardHtml;
-                }
-            });
-        }
-
-        // Fonction pour ouvrir la modale
-        function openModal(projectId) {
-            const project = projectsData.find(p => p.id === projectId);
-            if (!project) return;
-
-            const content = project[`content_${currentLang}`];
-            const langData = translations[currentLang];
-            const modal = document.getElementById('projectModal');
-            const modalBody = document.getElementById('modal-body');
-
-            // Création des metrics
-            const metricsHtml = content.metrics.map(m => `
-                <div class="p-4 bg-[var(--color-card-bg)] rounded-lg text-center border-b-2 border-accent-main">
-                    <div class="text-3xl font-extrabold text-accent-main">${m.value}</div>
-                    <p class="text-sm text-gray-400 mt-1">${m.label}</p>
                 </div>
-            `).join('');
-
-            // Création des points clés
-            const keyPointsHtml = content.key_points.map(p => `
-                <li class="flex items-start space-x-2 text-gray-300">
-                    <!-- Icône customisée pour le thème sombre -->
-                    <svg class="w-5 h-5 mt-1 flex-shrink-0 text-accent-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>${p}</span>
-                </li>
-            `).join('');
-            
-            // HTML du bouton vidéo (affiché seulement si video_url est présent)
-            const videoButtonHtml = content.video_url ? 
-                `<a href="${content.video_url}" target="_blank" 
-                   class="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-lg bg-accent-main hover:bg-[#d97c27] text-white font-semibold transition duration-200 shadow-md shadow-accent-main/30 mt-6 mb-8 w-full sm:w-auto">
-                    <!-- Icône de lecture -->
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
-                    <span>${langData.watch_video}</span>
-                </a>`
-                : '';
-
-            // HTML pour l'image statique
-            const mediaHtml = `<div class="aspect-video bg-[#1f1727] rounded-xl shadow-2xl mb-8 p-2 border border-[var(--color-accent-blue)]">
-                <img src="${content.image_url.replace('150', '338')}" alt="Visuel du projet ${content.title}" class="w-full h-full object-cover rounded-lg">
-            </div>`;
-
-
-            modalBody.innerHTML = `
-                <h2 class="text-4xl font-extrabold gradient-title mb-6">${content.title}</h2>
-
-                <!-- CONTENU MEDIA IMAGE -->
-                ${mediaHtml}
-                
-                <!-- BOUTON VIDEO CONDITIONNEL -->
-                <div class="text-center">
-                    ${videoButtonHtml}
-                </div>
-
-                <p class="text-lg text-gray-300 mb-8">${content.description}</p>
-
-                <!-- Metrics Clés -->
-                <h3 class="text-2xl font-bold text-accent-main mb-4">Metrics de Développement</h3>
-                <div class="grid grid-cols-3 gap-4 mb-10">
-                    ${metricsHtml}
-                </div>
-
-                <!-- Points Clés -->
-                <h3 class="text-2xl font-bold text-accent-main mb-4">Points Techniques Abordés</h3>
-                <ul class="space-y-4 list-none pl-0">
-                    ${keyPointsHtml}
-                </ul>
-            `;
-
-            document.getElementById('modal-close-btn').textContent = langData.modal_close;
-            modal.classList.remove('hidden');
-        }
-
-        // Fonction pour fermer la modale
-        function closeModal() {
-            document.getElementById('projectModal').classList.add('hidden');
-        }
-
-        // Initialisation au chargement de la page
-        window.onload = () => {
-            updateContent();
-        };
-    </script>
-
-    <!-- ---------------------------------------------------- -->
-    <!-- Structure HTML Principale -->
-    <!-- ---------------------------------------------------- -->
-
-    <!-- En-tête/Navigation -->
-    <header class="bg-[var(--color-card-bg)] py-4 shadow-xl sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <h1 class="text-xl font-bold text-gray-100">
-                Djason NATHIEZ
-            </h1>
-            <nav class="flex space-x-4 items-center">
-                <a id="contact-link" href="#contact" class="px-4 py-2 rounded-full bg-[var(--color-accent-blue)] text-white text-sm font-semibold hover:bg-[#3488d8] transition duration-200 shadow-md shadow-[var(--color-accent-blue)]/30">
-                    Me Contacter
-                </a>
-                <button id="lang-toggle" onclick="switchLanguage()"
-                    class="px-4 py-2 rounded-full border border-[var(--color-border)] text-gray-200 text-sm hover:bg-[#21262d] transition duration-200">
-                    English
-                </button>
-            </nav>
+            </div>
         </div>
-    </header>
+    </section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-
-        <!-- Section 1: Héro/Introduction -->
-        <section class="text-center mb-20 pt-10 animate-slide-in">
-            <p id="hero-subtitle" class="text-xl text-accent-secondary font-medium mb-3">Développeur de Jeux et Architecte Logiciel</p>
-            <h2 id="hero-title" class="text-6xl sm:text-7xl font-extrabold leading-tight">
-                <!-- Le titre (avec dégradé) et le curseur clignotant seront insérés ici par JavaScript -->
-            </h2>
-            <p class="mt-6 max-w-3xl mx-auto text-xl text-gray-400">
-                Spécialisé dans le développement d'architectures de systèmes robustes et performants (C#, C++, TypeScript). Expert en optimisation de code et en pipeline CI/CD.
-            </p>
-        </section>
-        
-        <!-- Section 2: Compétences Techniques Clés -->
-        <section id="skills" class="mb-20">
-            <h2 id="skills-title" class="text-4xl font-bold text-accent-main mb-8 border-b border-[var(--color-border)] pb-3 animate-slide-in">Compétences Techniques Clés</h2>
-            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Les compétences seront insérées ici par JavaScript -->
+    <!-- Outils (Marquee) -->
+    <section class="py-10 sm:py-12 bg-[#0a0a0c] border-y border-white/5 overflow-hidden">
+        <div class="animate-marquee flex items-center">
+            <div class="flex items-center space-x-12 sm:space-x-32 px-8 sm:px-16">
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2zm0 4l6 6-6 6-6-6 6-6z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Unity</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 7h2v10h-2V7z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Unreal</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h20L12 3zm0 3l7 7H5l7-7zm0 8l-6 6h12l-6-6z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Git</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.45L19.55 19H4.45L12 5.45z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Blender</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M2 3h20v18H2V3zm2 2v14h16V5H4zm2 2h12v2H6V7zm0 4h12v2H6v-2zm0 4h12v2H6v-2z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">C#</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">React</span>
+                </div>
             </div>
-        </section>
-
-
-        <!-- Section 3: Projets Jeux Vidéo -->
-        <section class="mb-16">
-            <h2 id="vg-title" class="text-4xl font-bold text-accent-main mb-8 border-b border-[var(--color-border)] pb-3 animate-slide-in">Projets Jeux Vidéo</h2>
-            <div id="video-games-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Les cartes de projets seront insérées ici par JavaScript -->
+            <!-- Loop duplicate -->
+            <div class="flex items-center space-x-12 sm:space-x-32 px-8 sm:px-16">
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2zm0 4l6 6-6 6-6-6 6-6z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Unity</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 7h2v10h-2V7z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Unreal</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h20L12 3zm0 3l7 7H5l7-7zm0 8l-6 6h12l-6-6z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Git</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.45L19.55 19H4.45L12 5.45z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">Blender</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M2 3h20v18H2V3zm2 2v14h16V5H4zm2 2h12v2H6V7zm0 4h12v2H6v-2zm0 4h12v2H6v-2z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">C#</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2 opacity-40 hover:opacity-100 transition-all group shrink-0">
+                    <svg class="w-8 sm:w-10 h-8 sm:h-10 group-hover:text-amber-500" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]">React</span>
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Section 4: Autres Projets -->
-        <section class="mb-16">
-            <h2 id="other-title" class="text-4xl font-bold text-accent-main mb-8 border-b border-[var(--color-border)] pb-3 animate-slide-in">Autres Projets</h2>
-            <div id="other-projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Les cartes de projets seront insérées ici par JavaScript -->
+    <!-- Project: Hero's Dawn -->
+    <section id="heros-dawn" class="py-20 sm:py-40 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="relative bg-[#0f0f12] border border-white/5 rounded-[32px] sm:rounded-[80px] p-8 sm:p-24 overflow-hidden shadow-2xl reveal">
+                <div class="grid lg:grid-cols-2 gap-12 sm:gap-20 items-center">
+                    <div>
+                        <div class="inline-block px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase tracking-widest mb-8 border border-amber-500/20">
+                            <span data-key="dawn_status">Projet Actuel</span>
+                        </div>
+                        <h2 class="text-5xl sm:text-8xl font-black text-white mb-8 tracking-tighter leading-none uppercase">HERO'S <br><span class="text-amber-500">DAWN</span></h2>
+                        <p data-key="dawn_desc" class="text-xl sm:text-2xl text-slate-300 mb-8 leading-relaxed font-semibold italic">RPG / Party-Game 3D Mobile par EmberForge.</p>
+                        <a href="https://emberforge.fr/games/herosdawn.html" target="_blank" class="inline-flex items-center px-10 py-5 bg-white text-black rounded-2xl font-black uppercase tracking-tighter hover:bg-amber-500 transition-all transform hover:scale-105 group shadow-xl w-full sm:w-auto justify-center">
+                            <span data-key="btn_more">En savoir plus</span> <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <div class="aspect-video bg-black/40 rounded-3xl border border-white/5 flex items-center justify-center relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent"></div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-500/30">Visuals Protected</p>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Section 5: Contact -->
-        <section id="contact" class="pt-16 pb-10 text-center border-t border-[var(--color-border)]">
-            <h2 class="text-4xl font-bold text-accent-main mb-4">Travaillons Ensemble</h2>
-            <p id="contact-text-p" class="text-lg text-gray-400 mb-8">
-                Vous avez un défi d'architecture de jeu ou un besoin d'optimisation ? Contactez-moi !
-            </p>
-            <a href="mailto:votre.email@exemple.com" class="px-10 py-4 rounded-full bg-accent-main text-white font-semibold text-lg hover:bg-[#d97c27] transition duration-300 shadow-xl shadow-accent-main/40">
-                votre.email@exemple.com
-            </a>
-        </section>
-
-    </main>
-
-    <!-- Modale (Pop-up) Dynamique pour les Détails de Projet -->
-    <div id="projectModal" class="modal fixed inset-0 hidden flex items-center justify-center p-4">
-        <div class="modal-content w-full max-w-4xl rounded-2xl p-6 md:p-10 shadow-3xl transform transition-all">
-            <!-- Bouton de fermeture -->
-            <div class="flex justify-end">
-                <button onclick="closeModal()"
-                    class="text-gray-400 hover:text-white transition duration-200">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+    <!-- Ludographie Section -->
+    <section id="games" class="py-20 sm:py-40 bg-[#08080a]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="mb-12 sm:mb-24 reveal">
+                <h2 class="text-3xl sm:text-6xl font-black text-white mb-4 tracking-tighter uppercase italic"><span data-key="title_ludo">Ludographie</span> <span class="text-amber-500">RUBIKA</span></h2>
+                <p class="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500">Héritage Supinfogame • 2019 — 2023</p>
             </div>
-            <!-- Contenu dynamique du projet -->
-            <div id="modal-body" class="mt-2">
-                <!-- Le contenu (titre, média conditionnel, description, points clés) sera injecté ici par JS -->
-            </div>
+            <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10"></div>
+        </div>
+    </section>
 
-            <!-- Bouton de fermeture en bas -->
-            <div class="mt-8 text-center">
-                <button onclick="closeModal()" class="px-8 py-3 rounded-full border border-[var(--color-border)] text-gray-200 font-semibold hover:bg-[#21262d] transition duration-200">
-                    <span id="modal-close-btn">Fermer</span>
-                </button>
+    <!-- Web & Pro Section -->
+    <section id="professional" class="py-20 sm:py-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid lg:grid-cols-3 gap-12 lg:gap-16">
+                <div class="lg:col-span-1 reveal">
+                    <h2 class="text-3xl sm:text-4xl font-black text-white mb-6 tracking-tighter uppercase italic">Web & <span class="text-amber-500 text-2xl sm:text-3xl">Pro Works</span></h2>
+                    <p data-key="pro_desc" class="text-slate-500 leading-relaxed mb-8">Solutions web robustes via EmberForge.</p>
+                </div>
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 reveal">
+                    <div class="p-8 rounded-[40px] bg-[#0f0f12] border border-white/5 group hover:border-amber-500/20 transition-all flex flex-col justify-between shadow-xl">
+                        <div>
+                            <h3 class="text-xl font-black text-white mb-2 uppercase">EmberForge.fr</h3>
+                            <p data-key="ef_sub" class="text-sm text-slate-400 mb-8 italic opacity-70">Plateforme officielle du studio.</p>
+                        </div>
+                        <a href="https://EmberForge.fr" target="_blank" class="text-[10px] font-black uppercase text-amber-500 flex items-center italic"><span data-key="btn_visit">Visiter</span> <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>
+                    </div>
+                    <div class="p-8 rounded-[40px] bg-[#0f0f12] border border-white/5 group hover:border-amber-500/20 transition-all flex flex-col justify-between shadow-xl">
+                        <div>
+                            <h3 class="text-xl font-black text-white mb-2 uppercase">Central Cars</h3>
+                            <p data-key="cc_sub" class="text-sm text-slate-400 mb-8 italic opacity-70">Solution automobile pro.</p>
+                        </div>
+                        <a href="https://centralcars.fr" target="_blank" class="text-[10px] font-black uppercase text-amber-500 flex items-center italic"><span data-key="btn_visit">Visiter</span> <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-32 md:py-48 bg-[#070708] border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center reveal">
+            <h2 class="text-5xl sm:text-8xl font-black text-white mb-10 tracking-tighter uppercase leading-none italic"><span data-key="contact_title_1">Lançons la</span> <span class="text-amber-500 underline decoration-4 underline-offset-8" data-key="contact_title_2">PARTIE</span></h2>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6 mt-16">
+                <a href="mailto:dm.nathiez@gmail.com" data-key="btn_hire" class="w-full sm:w-auto px-12 py-6 bg-white text-black rounded-2xl font-black uppercase tracking-tighter hover:bg-amber-500 transition-all shadow-xl text-center">Me recruter</a>
+                <a href="https://www.linkedin.com/in/djason-nathiez-391b2b365" target="_blank" class="p-5 bg-white/5 rounded-full text-slate-400 hover:text-amber-500 transition-all"><svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-[#070708] text-center text-[9px] font-black uppercase tracking-[0.4em] text-slate-700 px-6 border-t border-white/5">
+        DJASON NATHIEZ • EMBERFORGE STUDIO • RUBIKA 2019-2023 • UNITY & C#
+    </footer>
+
+    <!-- Modal Layout -->
+    <div id="project-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-0 md:p-10 modal-overlay">
+        <div class="relative bg-[#0f0f12] w-full h-full md:h-auto md:max-w-5xl md:rounded-[50px] shadow-2xl overflow-y-auto hide-scroll scale-95 opacity-0 transition-all duration-500" id="modal-content">
+            <!-- Header -->
+            <div class="sticky top-0 z-10 bg-[#0f0f12]/98 backdrop-blur-md px-5 sm:px-12 py-6 border-b border-white/5 flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div id="modal-icon" class="p-2 sm:p-3 bg-amber-500/10 text-amber-500 rounded-xl"></div>
+                    <div>
+                        <h3 id="modal-title" class="text-xl sm:text-2xl font-black text-white uppercase tracking-tighter leading-none mb-1"></h3>
+                        <p id="modal-type" class="text-[9px] font-black text-amber-500 uppercase tracking-widest italic"></p>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="p-2 bg-white/5 rounded-full text-slate-400 hover:text-white transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l18 18"></path></svg></button>
+            </div>
+            <!-- Body -->
+            <div class="p-6 sm:p-12 md:p-20">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-10 md:gap-20">
+                    <div class="lg:col-span-3">
+                        <div id="modal-media-wrapper" class="relative group aspect-video bg-black/40 rounded-2xl sm:rounded-3xl mb-8 border border-white/5 overflow-hidden">
+                            <img id="modal-image" src="" alt="Project Visual" class="w-full h-full object-cover block">
+                            <div id="modal-video-container" class="hidden w-full h-full">
+                                <iframe id="modal-iframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div id="gallery-controls" class="hidden">
+                                <button onclick="prevImage()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-amber-500 hover:text-black p-3 rounded-full text-white transition-all md:opacity-0 md:group-hover:opacity-100 z-20"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg></button>
+                                <button onclick="nextImage()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-amber-500 hover:text-black p-3 rounded-full text-white transition-all md:opacity-0 md:group-hover:opacity-100 z-20"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg></button>
+                                <div id="image-counter" class="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded-full text-[9px] font-black text-white/80 tracking-widest z-20"></div>
+                            </div>
+                        </div>
+                        <h4 class="text-sm font-black text-white uppercase italic flex items-center mb-6"><span class="w-8 h-[2px] bg-amber-500 mr-3"></span> <span data-key="modal_analysis">Analyse Technique</span></h4>
+                        <p id="modal-desc" class="text-slate-400 text-lg leading-relaxed opacity-90 mb-8"></p>
+                    </div>
+                    <div class="lg:col-span-2 space-y-10">
+                        <div class="p-8 rounded-3xl bg-white/5 border border-white/5">
+                            <h4 data-key="modal_missions" class="text-[9px] font-black text-white/40 uppercase mb-6 italic">Missions Clés</h4>
+                            <p id="modal-role" class="text-amber-500 font-black text-lg mb-6 leading-tight"></p>
+                            <ul id="modal-features" class="space-y-4"></ul>
+                        </div>
+                        <div id="modal-tags" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        // --- TRANSLATIONS ---
+        const translations = {
+            fr: {
+                nav_hero: "Hero's Dawn",
+                nav_about: "Parcours",
+                nav_games: "Ludographie",
+                nav_contact: "Contact",
+                nav_pro: "Web & Pro",
+                hero_status: "Disponible — Fondateur EmberForge Studio",
+                hero_desc: "Diplômé RUBIKA Supinfogame. Expert en Gameplay Programming et architectures multijoueurs.",
+                btn_ludo: "Ludographie",
+                dawn_status: "Projet Actuel",
+                dawn_desc: "RPG / Party-Game 3D Mobile par EmberForge.",
+                btn_more: "En savoir plus",
+                title_ludo: "Ludographie",
+                pro_desc: "Solutions web robustes via EmberForge.",
+                ef_sub: "Plateforme officielle du studio.",
+                cc_sub: "Solution automobile pro.",
+                btn_visit: "Visiter",
+                contact_title_1: "Lançons la",
+                contact_title_2: "PARTIE",
+                btn_hire: "Me recruter",
+                modal_analysis: "Analyse Technique",
+                modal_missions: "Missions Clés",
+                btn_analyze: "Analyser"
+            },
+            en: {
+                nav_hero: "Hero's Dawn",
+                nav_about: "Career",
+                nav_games: "Games",
+                nav_contact: "Contact",
+                nav_pro: "Web & Pro",
+                hero_status: "Available — Founder @ EmberForge Studio",
+                hero_desc: "RUBIKA Supinfogame Alumni. Expert in Gameplay Programming and Multiplayer architectures.",
+                btn_ludo: "Games Portfolio",
+                dawn_status: "Current Project",
+                dawn_desc: "RPG / 3D Mobile Party-Game by EmberForge.",
+                btn_more: "See more",
+                title_ludo: "Games",
+                pro_desc: "Robust web solutions via EmberForge.",
+                ef_sub: "Studio's official platform.",
+                cc_sub: "Professional automotive solution.",
+                btn_visit: "Visit site",
+                contact_title_1: "Start the",
+                contact_title_2: "GAME",
+                btn_hire: "Hire me",
+                modal_analysis: "Technical Analysis",
+                modal_missions: "Key Missions",
+                btn_analyze: "Analyze"
+            }
+        };
+
+        let currentLang = 'fr';
+
+        const gameProjects = [
+            {
+                id: "delight",
+                title: "Delight",
+                type: { fr: "Adventure 3D", en: "3D Adventure" },
+                role: { fr: "Gameplay Programmer", en: "Gameplay Programmer" },
+                desc: { fr: "Contrôleur personnage, IA par State Machines et architecture audio.", en: "Character controller, AI via State Machines and audio architecture." },
+                fullDesc: { fr: "Sur Delight, j'ai architecturé les systèmes de jeu centraux. Développement d'un contrôleur 3D fluide, d'IA ennemies réactives via FSM et intégration complète des assets.", en: "On Delight, I architected the core game systems. Developed a smooth 3D controller, reactive enemy AI via FSM and complete asset integration." },
+                images: [
+                    "https://dnathiez.github.io/img/delight/01.webp",
+                    "https://dnathiez.github.io/img/delight/02.webp",
+                    "https://dnathiez.github.io/img/delight/03.webp",
+                    "https://dnathiez.github.io/img/delight/04.webp",
+                    "https://dnathiez.github.io/img/delight/05.webp",
+                    "https://dnathiez.github.io/img/delight/06.webp",
+                    "https://dnathiez.github.io/img/delight/07.webp",
+                    "https://www.youtube.com/watch?v=Ls7xzg5Ivjg"
+                ],
+                features: { fr: ["Character Controller Custom", "IA FSM", "Audio Engine", "Integration 3D"], en: ["Custom Character Controller", "FSM AI", "Audio Engine", "3D Integration"] },
+                tags: ["Unity", "C#", "AI"],
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"></polyline><circle cx="8" cy="16" r="2"></circle><circle cx="16" cy="8" r="2"></circle></svg>'
+            },
+            {
+                id: "discosmos",
+                title: "Discosmos",
+                type: { fr: "MOBA 3D (2 mois)", en: "3D MOBA (2 months)" },
+                role: { fr: "Lead Network & Skills", en: "Lead Network & Skills" },
+                desc: { fr: "Netcode et synchronisation des sorts pour un MOBA compétitif.", en: "Netcode and skill synchronization for a competitive MOBA." },
+                fullDesc: { fr: "Mise en place de l'infrastructure réseau synchrone pour un MOBA réalisé en temps record. Optimisation de la latence et architecture des sorts.", en: "Setup of the synchronous network infrastructure for a MOBA made in record time. Latency optimization and skill architecture." },
+                images: ["https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200"],
+                features: { fr: ["Netcode Synchrone", "Lag Compensation", "Systèmes de Sorts"], en: ["Synchronous Netcode", "Lag Compensation", "Skill Systems"] },
+                tags: ["Networking", "C#"],
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path></svg>'
+            },
+            {
+                id: "beatstrike",
+                title: "BeatStrike",
+                type: { fr: "Rythme Mobile", en: "Mobile Rhythm" },
+                role: { fr: "Core Dev & Tooling", en: "Core Dev & Tooling" },
+                desc: { fr: "Moteur de rythme haute précision et outil d'édition Unity Editor.", en: "High-precision rhythm engine and custom Unity Editor tool." },
+                fullDesc: { fr: "Développement d'un moteur rythmique ultra-précis sur mobile et d'un outil Unity personnalisé pour la création de partitions musicale en temps réel.", en: "Development of an ultra-precise rhythm engine on mobile and a custom Unity tool for real-time music sheet creation." },
+                images: ["https://images.unsplash.com/photo-1514525253361-bee1b306b541?auto=format&fit=crop&q=80&w=1200"],
+                features: { fr: ["Moteur Rythmique", "Outils Editor", "UX Mobile"], en: ["Rhythm Engine", "Editor Tooling", "Mobile UX"] },
+                tags: ["Mobile", "Tooling"],
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle></svg>'
+            },
+            {
+                id: "sweet-courrier",
+                title: "Sweet Courrier",
+                type: { fr: "Twin Stick Co-op", en: "Twin Stick Co-op" },
+                role: { fr: "Gameplay Engineer", en: "Gameplay Engineer" },
+                desc: { fr: "Physique arcade et gestion des inputs multijoueurs locaux.", en: "Arcade physics and local multiplayer input management." },
+                fullDesc: { fr: "Shooter arcade coopératif. Focus sur le 'Game Feel' : réactivité des contrôles et physique dynamique des interactions.", en: "Cooperative arcade shooter. Focus on 'Game Feel': control responsiveness and dynamic interaction physics." },
+                images: ["https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&q=80&w=1200"],
+                features: { fr: ["Input Multijoueur", "Interactions Physiques", "Game Feel"], en: ["Multiplayer Input", "Physics Interaction", "Game Feel"] },
+                tags: ["Arcade", "Physics"],
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>'
+            }
+        ];
+
+        let currentImgIdx = 0;
+        let currentImages = [];
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            updateLanguageUI();
+            renderProjects();
+        }
+
+        function updateLanguageUI() {
+            // Static texts
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[currentLang][key]) {
+                    el.innerText = translations[currentLang][key];
+                }
+            });
+
+            // UI Elements
+            document.getElementById('lang-flag').innerText = currentLang === 'fr' ? '🇫🇷' : '🇺🇸';
+            document.getElementById('lang-text').innerText = currentLang.toUpperCase();
+            
+            document.querySelector('.mobile-lang-flag').innerText = currentLang === 'fr' ? '🇫🇷' : '🇺🇸';
+            document.querySelector('.mobile-lang-text').innerText = currentLang === 'fr' ? 'Français' : 'English';
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('games-grid');
+            grid.innerHTML = '';
+            gameProjects.forEach(p => {
+                grid.innerHTML += `
+                    <div class="group p-8 rounded-[40px] bg-[#0f0f12] border border-white/5 hover:border-amber-500/30 transition-all duration-500 reveal shadow-xl">
+                        <div class="p-3 bg-amber-500/10 text-amber-500 rounded-2xl w-fit mb-8 group-hover:bg-amber-500 group-hover:text-black transition-all">${p.icon}</div>
+                        <h3 class="text-2xl font-black text-white mb-2 uppercase tracking-tight">${p.title}</h3>
+                        <p class="text-[10px] font-black text-amber-500/60 uppercase mb-4 italic">${p.type[currentLang]}</p>
+                        <p class="text-base text-slate-400 opacity-70 mb-8">${p.desc[currentLang]}</p>
+                        <button onclick="openModal('${p.id}')" class="w-full py-4 bg-white/5 hover:bg-white text-white hover:text-black rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all transform active:scale-95">
+                            ${translations[currentLang].btn_analyze}
+                        </button>
+                    </div>`;
+            });
+            // Re-apply intersection observer to new elements
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // Utils Video
+        const getYoutubeID = (url) => {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length == 11) ? match[2] : null;
+        };
+
+        function openModal(id) {
+            const p = gameProjects.find(x => x.id === id);
+            const m = document.getElementById('project-modal');
+            const c = document.getElementById('modal-content');
+            currentImgIdx = 0;
+            currentImages = p.images || [];
+            
+            document.getElementById('modal-title').innerText = p.title;
+            document.getElementById('modal-type').innerText = p.type[currentLang];
+            document.getElementById('modal-desc').innerText = p.fullDesc[currentLang];
+            document.getElementById('modal-role').innerText = p.role[currentLang];
+            document.getElementById('modal-icon').innerHTML = p.icon;
+            
+            const f = document.getElementById('modal-features'); f.innerHTML = '';
+            p.features[currentLang].forEach(x => f.innerHTML += `<li class="text-xs text-slate-400 flex items-center"><span class="text-amber-500 mr-3">›</span>${x}</li>`);
+            const t = document.getElementById('modal-tags'); t.innerHTML = '';
+            p.tags.forEach(x => t.innerHTML += `<span class="px-3 py-1 bg-white/5 rounded-lg text-[9px] font-black text-slate-400 border border-white/5 uppercase">${x}</span>`);
+
+            updateGalleryUI();
+
+            m.classList.replace('hidden', 'flex');
+            setTimeout(() => c.classList.remove('scale-95', 'opacity-0'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateGalleryUI() {
+            const imgEl = document.getElementById('modal-image');
+            const videoCont = document.getElementById('modal-video-container');
+            const iframe = document.getElementById('modal-iframe');
+            const controls = document.getElementById('gallery-controls');
+            const counter = document.getElementById('image-counter');
+            
+            const currentItem = currentImages[currentImgIdx];
+            const ytID = getYoutubeID(currentItem);
+
+            imgEl.classList.add('hidden');
+            videoCont.classList.add('hidden');
+            iframe.src = "";
+
+            if (ytID) {
+                videoCont.classList.remove('hidden');
+                iframe.src = `https://www.youtube.com/embed/${ytID}?rel=0&modestbranding=1&enablejsapi=1`;
+            } else {
+                imgEl.classList.remove('hidden');
+                imgEl.src = currentItem;
+            }
+
+            if (currentImages.length > 1) {
+                controls.classList.remove('hidden');
+                counter.innerText = `${currentImgIdx + 1} / ${currentImages.length}`;
+            } else {
+                controls.classList.add('hidden');
+            }
+        }
+
+        function nextImage() { currentImgIdx = (currentImgIdx + 1) % currentImages.length; updateGalleryUI(); }
+        function prevImage() { currentImgIdx = (currentImgIdx - 1 + currentImages.length) % currentImages.length; updateGalleryUI(); }
+        
+        function closeModal() {
+            const iframe = document.getElementById('modal-iframe');
+            iframe.src = "";
+            const c = document.getElementById('modal-content');
+            c.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                document.getElementById('project-modal').classList.replace('flex', 'hidden');
+                document.body.style.overflow = '';
+            }, 400);
+        }
+
+        // Navigation
+        document.getElementById('menu-toggle').onclick = () => document.getElementById('mobile-menu').classList.add('active');
+        document.getElementById('menu-close').onclick = () => document.getElementById('mobile-menu').classList.remove('active');
+        document.querySelectorAll('#mobile-menu a').forEach(a => a.onclick = () => document.getElementById('mobile-menu').classList.remove('active'));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+
+        window.onscroll = () => {
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('bg-[#070708]/90', window.scrollY > 20);
+            nav.classList.toggle('backdrop-blur-xl', window.scrollY > 20);
+        };
+
+        window.onload = () => {
+            renderProjects();
+            updateLanguageUI();
+        };
+
+        window.addEventListener('keydown', e => { 
+            if(e.key === 'Escape') closeModal();
+            if(e.key === 'ArrowRight' && !document.getElementById('project-modal').classList.contains('hidden')) nextImage();
+            if(e.key === 'ArrowLeft' && !document.getElementById('project-modal').classList.contains('hidden')) prevImage();
+        });
+    </script>
 </body>
 </html>
